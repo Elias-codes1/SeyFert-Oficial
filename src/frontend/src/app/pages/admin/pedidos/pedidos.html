@@ -1,0 +1,64 @@
+<section class="admin-panel">
+  <header class="panel-header">
+    <h1>Gestión de Pedidos</h1>
+    <nav class="nav-admin">
+      <a routerLink="/admin/pedidos" class="activo">Pedidos</a>
+      <a routerLink="/admin/productos">Productos</a>
+      <button type="button" class="btn-logout" (click)="logout()">Cerrar Sesión</button>
+    </nav>
+  </header>
+
+  @if (cargando()) {
+    <p>Cargando pedidos...</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    <div class="tabla-contenedor">
+      <table class="tabla-admin">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Productos</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of pedidos(); track p.id) {
+            <tr>
+              <td><strong>#{{ p.id }}</strong></td>
+              <td>{{ p.fechaCreacion ? (p.fechaCreacion | date: 'dd/MM/yyyy HH:mm') : 'N/A' }}</td>
+              <td>{{ p.nombreCliente }}</td>
+              <td>{{ p.telefono }}</td>
+              <td>{{ p.direccion }}</td>
+              <td>
+                <ul>
+                  @for (item of p.items; track $index) {
+                    <li>{{ item.cantidad }} × {{ item.nombre }}</li>
+                  }
+                </ul>
+              </td>
+              <td>Q {{ p.total | number: '1.2-2' }}</td>
+              <td>
+                <span class="badge" [class]="p.estado.toLowerCase()">{{ p.estado }}</span>
+              </td>
+              <td>
+                <select #est (change)="cambiarEstado(p.id, $any(est.value))">
+                  <option [value]="p.estado" selected>{{ p.estado }}</option>
+                  @for (nuevoEstado of transiciones[p.estado]; track nuevoEstado) {
+                    <option [value]="nuevoEstado">{{ nuevoEstado }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

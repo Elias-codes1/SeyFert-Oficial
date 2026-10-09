@@ -1,0 +1,75 @@
+.admin-panel {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nav-admin {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-admin a {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+.nav-admin a.activo {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn-logout {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+.tabla-admin {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabla-admin th, .tabla-admin td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-admin th {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.badge.pendiente { background: #fef3c7; color: #92400e; }
+.badge.confirmado { background: #dbeafe; color: #1e40af; }
+.badge.entregado { background: #d1fae5; color: #065f46; }
+.badge.cancelado { background: #fee2e2; color: #991b1b; }

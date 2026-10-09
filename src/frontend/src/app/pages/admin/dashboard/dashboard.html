@@ -1,0 +1,19 @@
+<section class="dashboard">
+  <header class="encabezado">
+    <div><p class="eyebrow">Administración</p><h1>Resumen de SeyFert</h1><p>Indicadores actuales del inventario y los pedidos.</p></div>
+    <nav aria-label="Navegación administrativa">
+      <a routerLink="/admin/productos">Productos</a><a routerLink="/admin/catalogos">Categorías y marcas</a><a routerLink="/admin/pedidos">Pedidos</a>
+      <button type="button" (click)="logout()">Cerrar sesión</button>
+    </nav>
+  </header>
+  @if (cargando()) { <p class="aviso" role="status">Cargando indicadores…</p> }
+  @else if (error()) { <p class="aviso error" role="alert">{{ error() }}</p> }
+  @else if (indicadores(); as datos) {
+    <div class="tarjetas">
+      <article><span>Productos activos</span><strong>{{ datos.productosActivos }}</strong><a routerLink="/admin/productos">Ver inventario</a></article>
+      <article class="atencion"><span>Productos con stock bajo</span><strong>{{ datos.productosBajoStock }}</strong><a routerLink="/admin/productos">Revisar stock</a></article>
+      <article><span>Pedidos pendientes</span><strong>{{ datos.pedidosPendientes }}</strong><a routerLink="/admin/pedidos">Gestionar pedidos</a></article>
+      <article><span>Pedidos este mes</span><strong>{{ datos.pedidosMes }}</strong><a routerLink="/admin/pedidos">Ver pedidos</a></article>
+    </div>
+  }
+</section>

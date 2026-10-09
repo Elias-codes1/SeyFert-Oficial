@@ -1,0 +1,6 @@
+.cuenta { display: grid; place-items: center; min-height: 65vh; padding: 1rem; }
+.tarjeta { display: grid; gap: 1rem; width: min(100%, 420px); padding: 2rem; border-radius: 12px; background: white; box-shadow: 0 4px 16px #0002; }
+h1, p { margin: 0; } label { display: grid; gap: .4rem; font-weight: 600; }
+input { padding: .7rem; border: 1px solid #bbb; border-radius: 6px; font: inherit; }
+button { padding: .8rem; border: 0; border-radius: 6px; background: #172b23; color: white; font: inherit; cursor: pointer; }
+button:disabled { opacity: .6; } .secundario { background: #555; } a { color: #24634c; } .error { color: #a21d1d; }

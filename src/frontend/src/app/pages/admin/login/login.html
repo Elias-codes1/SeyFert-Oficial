@@ -1,0 +1,24 @@
+<section class="admin-login-container">
+  <form class="tarjeta-login" (submit)="$event.preventDefault(); ingresar()">
+    <h1>Panel de Administración</h1>
+    <p>Ingresa tus credenciales para gestionar productos y pedidos.</p>
+
+    <label class="campo">
+      <span>Usuario</span>
+      <input #u type="text" [value]="usuario()" (input)="usuario.set(u.value)" required />
+    </label>
+
+    <label class="campo">
+      <span>Contraseña</span>
+      <input #p type="password" [value]="clave()" (input)="clave.set(p.value)" required />
+    </label>
+
+    @if (error()) {
+      <div class="mensaje-error">{{ error() }}</div>
+    }
+
+    <button type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Ingresando...' : 'Iniciar Sesión' }}
+    </button>
+  </form>
+</section>

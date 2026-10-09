@@ -1,0 +1,64 @@
+<section class="admin-panel">
+  <header class="panel-header">
+    <h1>Categorías y marcas</h1>
+    <nav class="nav-admin">
+      <a routerLink="/admin/pedidos">Pedidos</a>
+      <a routerLink="/admin/productos">Productos</a>
+      <a routerLink="/admin/catalogos" class="activo">Categorías y marcas</a>
+      <button type="button" class="btn-logout" (click)="logout()">Cerrar sesión</button>
+    </nav>
+  </header>
+
+  @if (error()) { <p class="mensaje error" role="alert">{{ error() }}</p> }
+  @if (mensaje()) { <p class="mensaje exito" role="status">{{ mensaje() }}</p> }
+  @if (cargando()) { <p role="status">Cargando catálogos…</p> }
+  @else {
+    <div class="catalogos-grid">
+      <section class="tarjeta">
+        <h2>Categorías</h2>
+        <form (submit)="$event.preventDefault(); crear('categorias')">
+          <label for="nueva-categoria">Nueva categoría</label>
+          <div class="crear-fila"><input id="nueva-categoria" #cat [value]="nuevaCategoria()" (input)="nuevaCategoria.set(cat.value)" minlength="2" maxlength="80" required><button [disabled]="guardando()">Agregar</button></div>
+        </form>
+        @if (categorias().length === 0) { <p>Aún no hay categorías.</p> }
+        <ul>
+          @for (item of categorias(); track item.id) {
+            <li [class.inactivo]="!item.activa">
+              @if (editando()?.tipo === 'categorias' && editando()?.id === item.id) {
+                <input #nombre [value]="nombreEdicion()" (input)="nombreEdicion.set(nombre.value)" maxlength="80" aria-label="Nombre de la categoría">
+                <button type="button" (click)="guardarEdicion()" [disabled]="guardando()">Guardar</button>
+                <button type="button" class="secundario" (click)="cancelarEdicion()">Cancelar</button>
+              } @else {
+                <span>{{ item.nombre }} @if (!item.activa) { <small>(inactiva)</small> }</span>
+                @if (item.activa) { <button type="button" (click)="iniciarEdicion('categorias', item)">Editar</button><button class="peligro" type="button" (click)="desactivar('categorias', item)">Desactivar</button> }
+              }
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Marcas</h2>
+        <form (submit)="$event.preventDefault(); crear('marcas')">
+          <label for="nueva-marca">Nueva marca</label>
+          <div class="crear-fila"><input id="nueva-marca" #mar [value]="nuevaMarca()" (input)="nuevaMarca.set(mar.value)" minlength="2" maxlength="80" required><button [disabled]="guardando()">Agregar</button></div>
+        </form>
+        @if (marcas().length === 0) { <p>Aún no hay marcas.</p> }
+        <ul>
+          @for (item of marcas(); track item.id) {
+            <li [class.inactivo]="!item.activa">
+              @if (editando()?.tipo === 'marcas' && editando()?.id === item.id) {
+                <input #nombre [value]="nombreEdicion()" (input)="nombreEdicion.set(nombre.value)" maxlength="80" aria-label="Nombre de la marca">
+                <button type="button" (click)="guardarEdicion()" [disabled]="guardando()">Guardar</button>
+                <button type="button" class="secundario" (click)="cancelarEdicion()">Cancelar</button>
+              } @else {
+                <span>{{ item.nombre }} @if (!item.activa) { <small>(inactiva)</small> }</span>
+                @if (item.activa) { <button type="button" (click)="iniciarEdicion('marcas', item)">Editar</button><button class="peligro" type="button" (click)="desactivar('marcas', item)">Desactivar</button> }
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+  }
+</section>

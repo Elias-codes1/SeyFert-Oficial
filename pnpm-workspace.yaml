@@ -1,0 +1,9 @@
+packages:
+  - src/frontend
+  - src/backend
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true

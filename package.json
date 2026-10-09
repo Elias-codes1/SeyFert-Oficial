@@ -1,0 +1,13 @@
+{
+  "name": "seyfert",
+  "private": true,
+  "packageManager": "pnpm@11.10.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @seyfert/backend --filter @seyfert/frontend dev",
+    "dev:backend": "pnpm --filter @seyfert/backend dev",
+    "dev:frontend": "pnpm --filter @seyfert/frontend dev",
+    "build": "pnpm --recursive --if-present build",
+    "test:backend": "pnpm --filter @seyfert/backend test",
+    "test:frontend": "pnpm --filter @seyfert/frontend test"
+  }
+}

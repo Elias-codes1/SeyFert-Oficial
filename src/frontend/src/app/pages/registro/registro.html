@@ -1,0 +1,15 @@
+<section class="cuenta">
+  <form class="tarjeta" [formGroup]="form" (ngSubmit)="registrar()" novalidate>
+    <h1>Crear cuenta</h1>
+    <p>Regístrate para consultar y actualizar tu perfil.</p>
+    <label>Nombre<input formControlName="nombre" minlength="2" maxlength="100" required autocomplete="name"></label>
+    @if (form.controls.nombre.touched && form.controls.nombre.invalid) { <small class="error">El nombre debe tener entre 2 y 100 caracteres.</small> }
+    <label>Correo electrónico<input type="email" formControlName="email" maxlength="150" required autocomplete="email"></label>
+    @if (form.controls.email.touched && form.controls.email.invalid) { <small class="error">Ingresa un correo válido.</small> }
+    <label>Contraseña<input type="password" formControlName="clave" minlength="8" maxlength="72" required autocomplete="new-password"></label>
+    @if (form.controls.clave.touched && form.controls.clave.invalid) { <small class="error">La contraseña debe tener entre 8 y 72 caracteres.</small> }
+    @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+    <button type="submit" [disabled]="cargando()">{{ cargando() ? 'Creando cuenta…' : 'Registrarme' }}</button>
+    <a routerLink="/admin/login">¿Ya tienes cuenta? Inicia sesión</a>
+  </form>
+</section>

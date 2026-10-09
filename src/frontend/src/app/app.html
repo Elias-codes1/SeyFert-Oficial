@@ -1,0 +1,24 @@
+<header class="cabecera">
+  <div class="contenedor">
+    <a class="logo" routerLink="/">{{ title() }}</a>
+    <span class="lema">Belleza y moda</span>
+    @if (auth.rol() === 'CLIENTE') {
+      <a routerLink="/perfil" class="carrito-enlace">Mi perfil</a>
+      <button type="button" class="enlace-sesion" (click)="cerrarSesion()">Cerrar sesión</button>
+    } @else if (auth.rol() === 'ADMIN') {
+      <a routerLink="/admin/dashboard" class="carrito-enlace">Panel admin</a>
+      <button type="button" class="enlace-sesion" (click)="cerrarSesion()">Cerrar sesión</button>
+    } @else {
+      <a routerLink="/registro" class="carrito-enlace">Crear cuenta</a>
+      <a routerLink="/admin/login" class="carrito-enlace">Iniciar sesión</a>
+    }
+    <a class="carrito-enlace" routerLink="/carrito">
+      Carrito
+      <span class="contador">{{ carrito.cantidadTotal() }}</span>
+    </a>
+  </div>
+</header>
+
+<main class="contenedor principal">
+  <router-outlet />
+</main>

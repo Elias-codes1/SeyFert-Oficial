@@ -1,0 +1,199 @@
+.carrito h1 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem;
+}
+
+.carrito h2 {
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.lineas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.linea {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.marca {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--texto-suave);
+}
+
+.unitario {
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+}
+
+.cantidad {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cantidad button {
+  width: 2rem;
+  height: 2rem;
+  font: inherit;
+  border: 1px solid var(--borde);
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cantidad button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.subtotal {
+  min-width: 5.5rem;
+  text-align: right;
+}
+
+.quitar {
+  font: inherit;
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: #a32638;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.total {
+  text-align: right;
+  font-size: 1.2rem;
+  margin: 1rem 0 0;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem 1rem;
+  padding: 1rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.campo-ancho {
+  grid-column: 1 / -1;
+}
+
+.campo input,
+.campo textarea {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--texto);
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.error-campo {
+  color: #a32638;
+}
+
+.aviso {
+  padding: 1rem 0;
+  color: var(--texto-suave);
+}
+
+.aviso-error {
+  color: #a32638;
+}
+
+.boton {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--acento);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.boton-whatsapp {
+  background: #1f9d55;
+  font-size: 1.05rem;
+}
+
+.nota {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.confirmacion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+}
+
+.confirmacion p {
+  margin: 0;
+}
+
+.enlace {
+  color: var(--acento);
+}
+
+@media (max-width: 640px) {
+  .linea {
+    grid-template-columns: 1fr auto;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+}

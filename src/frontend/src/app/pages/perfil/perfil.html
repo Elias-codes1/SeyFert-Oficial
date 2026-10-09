@@ -1,0 +1,17 @@
+<section class="cuenta">
+  @if (cargando()) { <p role="status">Cargando perfil…</p> }
+  @else if (usuario()) {
+    <form class="tarjeta" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <h1>Mi perfil</h1><p>Rol: {{ usuario()!.rol }}</p>
+      <label>Nombre<input formControlName="nombre" minlength="2" maxlength="100" required></label>
+      @if (form.controls.nombre.touched && form.controls.nombre.invalid) { <small class="error">El nombre debe tener entre 2 y 100 caracteres.</small> }
+      <label>Correo electrónico<input type="email" formControlName="email" required maxlength="150"></label>
+      @if (form.controls.email.touched && form.controls.email.invalid) { <small class="error">Ingresa un correo válido.</small> }
+      @if (mensaje()) { <p role="status">{{ mensaje() }}</p> }
+      @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+      <button type="submit" [disabled]="guardando()">{{ guardando() ? 'Guardando…' : 'Guardar cambios' }}</button>
+      <button type="button" class="secundario" (click)="cerrarSesion()">Cerrar sesión</button>
+      <a routerLink="/">Volver al catálogo</a>
+    </form>
+  } @else { <div class="tarjeta"><p class="error">{{ error() }}</p><a routerLink="/admin/login">Ir a iniciar sesión</a></div> }
+</section>

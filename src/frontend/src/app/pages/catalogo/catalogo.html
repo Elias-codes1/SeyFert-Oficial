@@ -1,0 +1,125 @@
+<section class="catalogo">
+  <h1>Catálogo</h1>
+  <p class="intro">Perfumes, ropa, maquillaje y accesorios en un solo lugar.</p>
+
+  <div class="filtros">
+    <label class="campo campo-busqueda">
+      <span>Buscar</span>
+      <input
+        #buscar
+        type="search"
+        placeholder="Nombre del producto"
+        [value]="busqueda()"
+        (input)="cambiarBusqueda(buscar.value)"
+      />
+    </label>
+
+    <label class="campo">
+      <span>Categoría</span>
+      <select #cat (change)="cambiarCategoria(cat.value)">
+        <option value="" [selected]="!categoria()">Todas</option>
+        @for (c of categorias(); track c.id) {
+          <option [value]="c.id" [selected]="categoria() === '' + c.id">{{ c.nombre }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="campo">
+      <span>Marca</span>
+      <select #mar (change)="cambiarMarca(mar.value)">
+        <option value="" [selected]="!marca()">Todas</option>
+        @for (m of marcas(); track m.id) {
+          <option [value]="m.id" [selected]="marca() === '' + m.id">{{ m.nombre }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="campo">
+      <span>Género</span>
+      <select #gen (change)="cambiarGenero(gen.value)">
+        <option value="" [selected]="!genero()">Todos</option>
+        @for (g of generos; track g[0]) {
+          <option [value]="g[0]" [selected]="genero() === g[0]">{{ g[1] }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="campo campo-precio">
+      <span>Precio mínimo (Q)</span>
+      <input
+        #min
+        type="number"
+        min="0"
+        placeholder="0"
+        [value]="precioMin() ?? ''"
+        (change)="cambiarPrecioMin(min.value)"
+      />
+    </label>
+
+    <label class="campo campo-precio">
+      <span>Precio máximo (Q)</span>
+      <input
+        #max
+        type="number"
+        min="0"
+        placeholder="Sin límite"
+        [value]="precioMax() ?? ''"
+        (change)="cambiarPrecioMax(max.value)"
+      />
+    </label>
+
+    @if (hayFiltros()) {
+      <button type="button" class="limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p class="aviso">Cargando productos...</p>
+  } @else if (error()) {
+    <p class="aviso aviso-error">No se pudo cargar el catálogo. Intenta de nuevo en un momento.</p>
+  } @else if (filtrados().length === 0) {
+    <p class="aviso">
+      {{ hayFiltros() ? 'No hay productos con esos filtros.' : 'Aún no hay productos en el catálogo.' }}
+    </p>
+  } @else {
+    <p class="conteo">{{ pagina()?.total ?? filtrados().length }} {{ (pagina()?.total ?? filtrados().length) === 1 ? 'producto' : 'productos' }}</p>
+
+    <ul class="grilla">
+      @for (p of filtrados(); track p.id) {
+        <li class="tarjeta" [class.agotado]="p.stock <= 0">
+          <div class="imagen" aria-hidden="true">{{ p.categoria.charAt(0) }}</div>
+          <div class="cuerpo">
+            <span class="marca">{{ p.marca }}</span>
+            <h2>{{ p.nombre }}</h2>
+            @if (p.descripcion) {
+              <p class="descripcion">{{ p.descripcion }}</p>
+            }
+            <div class="etiquetas">
+              <span class="etiqueta">{{ p.categoria }}</span>
+              <span class="etiqueta">{{ etiquetaGenero(p.genero) }}</span>
+            </div>
+            <div class="pie">
+              <strong class="precio">Q {{ p.precio | number: '1.2-2' }}</strong>
+              <span class="stock" [class]="'stock ' + disponibilidad(p.stock)">
+                {{ textoDisponibilidad(p.stock) }}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="agregar"
+              [disabled]="p.stock <= 0 || enCarrito(p.id) >= p.stock"
+              (click)="agregar(p)"
+            >
+              {{ textoBoton(p) }}
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+    <nav class="paginacion" aria-label="Paginación del catálogo">
+      <button type="button" class="limpiar" [disabled]="!pagina() || pagina()!.page <= 1" (click)="irPagina(-1)">Anterior</button>
+      <span>Página {{ pagina()?.page ?? 1 }} de {{ pagina()?.totalPages ?? 1 }}</span>
+      <button type="button" class="limpiar" [disabled]="!pagina() || pagina()!.page >= pagina()!.totalPages" (click)="irPagina(1)">Siguiente</button>
+    </nav>
+  }
+</section>

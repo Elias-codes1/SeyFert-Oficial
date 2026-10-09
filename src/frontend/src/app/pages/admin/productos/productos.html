@@ -1,0 +1,67 @@
+<section class="admin-panel">
+  <header class="panel-header">
+    <h1>Gestión de productos</h1>
+    <nav class="nav-admin">
+      <a routerLink="/admin/pedidos">Pedidos</a>
+      <a routerLink="/admin/productos" class="activo">Productos</a>
+      <a routerLink="/admin/catalogos">Categorías y marcas</a>
+      <button type="button" class="btn-logout" (click)="logout()">Cerrar sesión</button>
+    </nav>
+  </header>
+
+  @if (error()) { <p class="mensaje error" role="alert">{{ error() }}</p> }
+  @if (mensaje()) { <p class="mensaje exito" role="status">{{ mensaje() }}</p> }
+
+  <div class="grid-admin-productos">
+    <form class="form-producto" (submit)="$event.preventDefault(); guardarProducto()">
+      <h2>{{ editandoId() ? 'Editar producto' : 'Agregar producto' }}</h2>
+      <label><span>Nombre *</span><input #nom type="text" [value]="nombre()" (input)="nombre.set(nom.value)" minlength="2" maxlength="150" required></label>
+      <label><span>Marca *</span>
+        <select #mar [value]="marcaId()" (change)="marcaId.set(+mar.value)" required>
+          <option value="0">Selecciona una marca</option>
+          @for (marca of marcas(); track marca.id) { @if (marca.activa) { <option [value]="marca.id">{{ marca.nombre }}</option> } }
+        </select>
+      </label>
+      <label><span>Categoría *</span>
+        <select #cat [value]="categoriaId()" (change)="categoriaId.set(+cat.value)" required>
+          <option value="0">Selecciona una categoría</option>
+          @for (categoria of categorias(); track categoria.id) { @if (categoria.activa) { <option [value]="categoria.id">{{ categoria.nombre }}</option> } }
+        </select>
+      </label>
+      <label><span>Género *</span>
+        <select #gen [value]="genero()" (change)="genero.set($any(gen.value))">
+          <option value="DAMA">Dama</option><option value="CABALLERO">Caballero</option><option value="UNISEX">Unisex</option>
+        </select>
+      </label>
+      <label><span>Precio (Q) *</span><input #pre type="number" step="0.01" min="0.01" [value]="precio()" (input)="precio.set(+pre.value)" required></label>
+      <label><span>Stock disponible *</span><input #stk type="number" min="0" step="1" [value]="stock()" (input)="stock.set(+stk.value)" required></label>
+      <label><span>Descripción</span><textarea #desc rows="3" maxlength="1000" [value]="descripcion()" (input)="descripcion.set(desc.value)"></textarea></label>
+      <button type="submit" class="btn-guardar" [disabled]="marcas().length === 0 || categorias().length === 0">{{ editandoId() ? 'Guardar cambios' : 'Crear producto' }}</button>
+      @if (editandoId()) { <button type="button" class="btn-cancelar" (click)="cancelarEdicion()">Cancelar edición</button> }
+    </form>
+
+    <div class="lista-productos">
+      <h2>Inventario ({{ productos().length }})</h2>
+      @if (cargando()) { <p role="status">Cargando inventario…</p> }
+      @else if (productos().length === 0) { <p>Aún no hay productos.</p> }
+      @else {
+        <div class="tabla-contenedor"><table class="tabla-admin">
+          <thead><tr><th>Producto</th><th>Marca</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody>
+            @for (p of productos(); track p.id) {
+              <tr [class.inactivo]="!p.activo">
+                <td><strong>{{ p.nombre }}</strong></td><td>{{ p.marca }}</td><td>{{ p.categoria }}</td>
+                <td>Q {{ p.precio | number: '1.2-2' }}</td><td>{{ p.stock }}</td>
+                <td>{{ p.activo ? 'Activo' : 'Inactivo' }}</td>
+                <td class="acciones"><button type="button" (click)="editar(p)">Editar</button>
+                  @if (p.activo) { <button type="button" class="btn-eliminar" (click)="desactivar(p.id)">Desactivar</button> }
+                  @else { <button type="button" (click)="activar(p.id)">Activar</button> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table></div>
+      }
+    </div>
+  </div>
+</section>

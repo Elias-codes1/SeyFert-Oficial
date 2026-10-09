@@ -1,0 +1,138 @@
+<section class="carrito-container">
+  <h1>Tu Carrito de Compras</h1>
+
+  @if (pedido()) {
+    <!-- Pantalla de Éxito / Confirmación de Pedido -->
+    <div class="confirmacion">
+      <h2>¡Pedido registrado con éxito!</h2>
+      <p class="numero-pedido">Pedido #{{ pedido()?.id }}</p>
+      <p>El total de tu compra es: <strong>Q {{ pedido()?.total | number: '1.2-2' }}</strong></p>
+      
+      <p class="instrucciones">
+        Para coordinar la entrega y el pago, presiona el siguiente botón para enviar tu orden por WhatsApp:
+      </p>
+
+      <a [href]="enlaceWhatsapp()" target="_blank" rel="noopener noreferrer" class="boton-whatsapp">
+        Enviar pedido por WhatsApp
+      </a>
+
+      <a routerLink="/" class="enlace-volver">Volver al catálogo</a>
+    </div>
+  } @else if (carrito.items().length === 0) {
+    <!-- Carrito Vacío -->
+    <div class="carrito-vacio">
+      <p>Tu carrito está vacío actualmente.</p>
+      <a routerLink="/" class="boton-catalogo">Ir al Catálogo</a>
+    </div>
+  } @else {
+    <!-- Lista de Productos e Ingreso de Datos -->
+    <div class="grid-carrito">
+      <div class="lista-items">
+        <h2>Productos seleccionados</h2>
+        <ul>
+          @for (item of carrito.items(); track item.producto.id) {
+            <li class="item-fila">
+              <div class="info">
+                <h3>{{ item.producto.nombre }}</h3>
+                <span class="marca">{{ item.producto.marca }}</span>
+                <p class="precio-unitario">Q {{ item.producto.precio | number: '1.2-2' }} c/u</p>
+              </div>
+
+              <div class="controles">
+                <button 
+                  type="button" 
+                  (click)="carrito.cambiarCantidad(item.producto.id, item.cantidad - 1)">-</button>
+                <span class="cantidad">{{ item.cantidad }}</span>
+                <button 
+                  type="button" 
+                  [disabled]="item.cantidad >= item.producto.stock"
+                  (click)="carrito.cambiarCantidad(item.producto.id, item.cantidad + 1)">+</button>
+              </div>
+
+              <div class="subtotal">
+                <strong>Q {{ subtotal(item) | number: '1.2-2' }}</strong>
+              </div>
+
+              <button 
+                type="button" 
+                class="eliminar" 
+                (click)="carrito.quitar(item.producto.id)" 
+                title="Quitar producto">
+                &times;
+              </button>
+            </li>
+          }
+        </ul>
+
+        <div class="resumen-totales">
+          <span>Total de productos: {{ carrito.cantidadTotal() }}</span>
+          <span class="total-final">Total a pagar: <strong>Q {{ carrito.total() | number: '1.2-2' }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Formulario de Checkout -->
+      <form class="formulario-checkout" (submit)="$event.preventDefault(); confirmar()">
+        <h2>Datos para la entrega</h2>
+
+        <label class="campo">
+          <span>Nombre completo *</span>
+          <input 
+            #nom 
+            type="text" 
+            placeholder="Ej. Juan Pérez" 
+            [value]="nombre()" 
+            (input)="nombre.set(nom.value)" 
+          />
+          @if (intentado() && !nombreValido()) {
+            <small class="error-texto">Ingresa un nombre válido (mínimo 2 caracteres).</small>
+          }
+        </label>
+
+        <label class="campo">
+          <span>Teléfono *</span>
+          <input 
+            #tel 
+            type="tel" 
+            placeholder="Ej. 55551234" 
+            [value]="telefono()" 
+            (input)="telefono.set(tel.value)" 
+          />
+          @if (intentado() && !telefonoValido()) {
+            <small class="error-texto">Ingresa un número telefónico de al menos 8 dígitos.</small>
+          }
+        </label>
+
+        <label class="campo">
+          <span>Dirección de entrega *</span>
+          <textarea 
+            #dir 
+            rows="3" 
+            placeholder="Dirección exacta de envío" 
+            [value]="direccion()" 
+            (input)="direccion.set(dir.value)"></textarea>
+          @if (intentado() && !direccionValida()) {
+            <small class="error-texto">Ingresa una dirección válida (mínimo 5 caracteres).</small>
+          }
+        </label>
+
+        <label class="campo">
+          <span>Notas adicionales (opcional)</span>
+          <textarea 
+            #not 
+            rows="2" 
+            placeholder="Instrucciones especiales de entrega..." 
+            [value]="notas()" 
+            (input)="notas.set(not.value)"></textarea>
+        </label>
+
+        @if (error()) {
+          <div class="mensaje-error">{{ error() }}</div>
+        }
+
+        <button type="submit" class="boton-confirmar" [disabled]="enviando()">
+          {{ enviando() ? 'Procesando...' : 'Confirmar Pedido' }}
+        </button>
+      </form>
+    </div>
+  }
+</section>
